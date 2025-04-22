@@ -1,0 +1,89 @@
+.candidat-container {
+    height: 100vh;
+    background-color: #C5C6C6; /* Fond gris clair */
+    color: #2E3244;  /* Texte de couleur foncée */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  
+  .candidat-header h1 {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    color: #2E3244;
+  }
+  
+  .upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .file-label {
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .file-upload-box {
+    padding: 20px;
+    width: 300px;
+    border: 2px dashed #F1895C;
+    border-radius: 10px;
+    color: #F1F1F1;
+    background-color: #516079;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+  
+  .file-upload-box:hover {
+    background-color: #2E3244;
+  }
+  
+  .submit-btn {
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    background-color: #F1895C;
+    color: #F1F1F1;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .submit-btn:hover {
+    background-color: #F1F1F1;
+    color: #2E3244;
+  }
+  
+  /* Icône de flèche à droite, en bas de la page dans un cercle */
+  .dashboard-link {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    font-size: 2rem;
+    color: #F1F1F1;
+    cursor: pointer;
+    background-color: #516079; /* Couleur de fond de l'icône */
+    border-radius: 50%; /* Cercle parfait */
+    padding: 20px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .dashboard-link:hover {
+    transform: translateX(10px);
+    background-color: #2E3244; /* Changer la couleur au survol */
+  }
+  

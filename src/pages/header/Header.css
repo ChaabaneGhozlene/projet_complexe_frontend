@@ -1,0 +1,67 @@
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .search-bar {
+    padding: 10px;
+    font-size: 1.1rem;
+    width: 300px;
+    border: 1px solid #C5C6C6;
+    border-radius: 5px;
+  }
+  
+  .icons {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .icons .user-icon {
+    position: relative;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .icons .notification-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .user-info-box {
+    position: absolute;
+    left: -300px;  /* Place the box to the left of the icon */
+    top: 10;
+    background-color: #2E3244;
+    color: white;
+    padding-top: 0px;
+    padding: 20px;
+
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 250px;  /* Increase the width of the box */
+    font-size: 1rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    height:300px;
+  }
+  
+  .user-info-box p {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .user-info-box strong {
+    color: #F1895C;  /* Use your preferred color */
+  }
+ 
+  
+.user-info-box p:not(:last-child) {
+    border-bottom: 1px solid #C5C6C6;  /* Add a light gray line between fields */
+    padding-bottom: 10px;
+  }
