@@ -1,0 +1,51 @@
+.container {
+    margin: 30px 200px; /* 20px haut/bas, 40px gauche/droite */
+
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-bottom: 20px;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 50px; /* augmente l'espacement entre les deux champs */
+    margin-bottom: 15px;
+  }
+  
+  .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .save-button,
+  .cancel-button {
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;           /* pleine largeur dans le conteneur */
+    padding: 8px;          /* espacement interne */
+    font-size: 14px;       /* taille de police uniforme */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+    box-sizing: border-box; /* inclure le padding/border dans width */
+  }
+  
