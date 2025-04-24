@@ -1,61 +1,37 @@
-import React, { useState } from 'react';
+// App.js
+import React, { useState, useEffect } from 'react';
 import OfferManagement from './OffreManagement';
 import CandidateManagement from './CandidatMange';
 import './CandidateManagement.css';
 import Header from '../header/Header';
+import {
+  fetchOffres,
+  createOffre,
+  updateOffre,
+  deleteOffre
+} from './api'; // adapte le chemin selon l'arborescence
 
 const App = () => {
   const [view, setView] = useState('list');
   const [selectedOffre, setSelectedOffre] = useState(null);
   const [showCV, setShowCV] = useState(null);
   const [offreToEdit, setOffreToEdit] = useState(null);
+  const [offres, setOffres] = useState([]);
 
-  const [offres, setOffres] = useState([
-    {
-      id: 1,
-      titre: 'Développeur React.js',
-      entreprise: 'Tech Solutions Inc.',
-      localisation: 'Paris, France',
-      datePublication: '15/04/2023',
-      description: 'Nous recherchons un développeur React.js expérimenté pour rejoindre notre équipe. Vous serez responsable du développement de nouvelles fonctionnalités pour nos applications web.',
-      candidats: [
-        {
-          id: 101,
-          nom: 'Jean Dupont',
-          email: 'jean.dupont@email.com',
-          statut: 'EN_ATTENTE',
-          cv: 'https://example.com/cv-jean-dupont.pdf'
-        },
-        {
-          id: 102,
-          nom: 'Marie Martin',
-          email: 'marie.martin@email.com',
-          statut: 'ACCEPTE',
-          cv: 'https://example.com/cv-marie-martin.pdf'
-        }
-      ]
-    },
-    {
-      id: 2,
-      titre: 'Designer UI/UX',
-      entreprise: 'Creative Agency',
-      localisation: 'Lyon, France',
-      datePublication: '10/04/2023',
-      description: 'Nous cherchons un designer UI/UX talentueux pour concevoir des interfaces utilisateur intuitives et esthétiques pour nos clients.',
-      candidats: [
-        {
-          id: 201,
-          nom: 'Lucie Bernard',
-          email: 'lucie.bernard@email.com',
-          statut: 'REJETE',
-          cv: 'https://example.com/cv-lucie-bernard.pdf'
-        }
-      ]
-    }
-  ]);
+  useEffect(() => {
+    const loadOffres = async () => {
+      const data = await fetchOffres();
+      console.log("Offres récupérées depuis l'API :", data); // 👈 LOG ICI
+      setOffres(data);
+    };
+    loadOffres();
+  }, []);
+  
 
-  const handleDeleteOffre = (offreId) => {
-    setOffres(offres.filter(offre => offre.id !== offreId));
+  const handleDeleteOffre = async (offreId) => {
+    await deleteOffre(offreId);
+    const updated = await fetchOffres();
+    setOffres(updated);
   };
 
   const handleEditOffre = (offre) => {
@@ -63,16 +39,21 @@ const App = () => {
     setView('edit');
   };
 
-  const handleSaveOffre = (offre) => {
+  const handleSaveOffre = async (offre) => {
     if (offreToEdit) {
-      setOffres(offres.map(o => o.id === offre.id ? offre : o));
+      // Mise à jour de l'offre
+      await updateOffre(offre.id, offre);
+      const updatedOffres = offres.map(o => o.id === offre.id ? offre : o);
+      setOffres(updatedOffres);  // Mise à jour de l'état local
     } else {
-      setOffres([...offres, offre]);
+      // Création d'une nouvelle offre
+      const newOffre = await createOffre(offre);
+      setOffres(prevOffres => [...prevOffres, newOffre]);  // Ajout de l'offre à la liste existante
     }
     setView('list');
     setOffreToEdit(null);
   };
-
+  
   const handleBackToList = () => {
     setView('list');
   };
@@ -90,7 +71,6 @@ const App = () => {
       }
       return offre;
     });
-    
     setOffres(updatedOffres);
     setSelectedOffre(updatedOffres.find(o => o.id === selectedOffre.id));
   };
@@ -108,7 +88,6 @@ const App = () => {
       }
       return offre;
     });
-    
     setOffres(updatedOffres);
     setSelectedOffre(updatedOffres.find(o => o.id === selectedOffre.id));
   };
@@ -123,8 +102,7 @@ const App = () => {
 
   return (
     <div className="App">
-            <Header />
-
+      <Header />
       {view === 'detail' ? (
         <CandidateManagement
           selectedOffre={selectedOffre}

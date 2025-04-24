@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pencil, Trash2, Search,Plus  } from 'lucide-react';
+import { Pencil, Trash2, Search, Plus } from 'lucide-react';
 import './CandidateManagement.css';
 
 const OffresList = ({ 
@@ -35,13 +35,13 @@ const OffresList = ({
         </div>
         
         <button 
-  className="create-button"
-  onClick={onCreateOffre}
-  aria-label="Créer une nouvelle offre d'emploi"
->
-  <Plus size={18} className="button-icon" />
-  <span>Créer une Nouvelle Offre</span>
-</button>
+          className="create-button"
+          onClick={onCreateOffre}
+          aria-label="Créer une nouvelle offre d'emploi"
+        >
+          <Plus size={18} className="button-icon" />
+          <span>Créer une Nouvelle Offre</span>
+        </button>
       </div>
       
       <div className="offres-grid">
@@ -57,13 +57,13 @@ const OffresList = ({
               <div className="offre-actions">
                 <button className="edit-button" onClick={(e) => {
                   e.stopPropagation();
-                  onEditOffre(offre);
+                  onEditOffre(offre);  // On edit the offer
                 }}>
                   <Pencil size={18} color="#ACC572" />
                 </button>
                 <button className="delete-button" onClick={(e) => {
                   e.stopPropagation();
-                  setOffreASupprimer(offre);
+                  setOffreASupprimer(offre);  // On set the offer to be deleted
                 }}>
                   <Trash2 size={18} color="#e74c3c"/>
                 </button>
@@ -77,7 +77,7 @@ const OffresList = ({
         )}
       </div>
 
-      {/* Popup de confirmation */}
+      {/* Popup de confirmation pour la suppression */}
       {offreASupprimer && (
         <div className="delete-modal-overlay">
           <div className="delete-modal">
@@ -87,15 +87,15 @@ const OffresList = ({
               <button
                 className="confirm-delete-button"
                 onClick={() => {
-                  onDeleteOffre(offreASupprimer.id);
-                  setOffreASupprimer(null);
+                  onDeleteOffre(offreASupprimer.id);  // On delete the offer
+                  setOffreASupprimer(null);  // Reset the delete confirmation state
                 }}
               >
                 Oui, supprimer
               </button>
               <button
                 className="cancel-delete-button"
-                onClick={() => setOffreASupprimer(null)}
+                onClick={() => setOffreASupprimer(null)}  // Close modal if cancelled
               >
                 Annuler
               </button>
