@@ -64,6 +64,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin-top: 20px;
   }
   
   .submit-btn:hover {
@@ -83,10 +84,56 @@
     border-radius: 50%; /* Cercle parfait */
     padding: 20px;
     transition: transform 0.3s ease, background-color 0.3s ease;
+   
   }
   
   .dashboard-link:hover {
     transform: translateX(10px);
     background-color: #2E3244; /* Changer la couleur au survol */
   }
+
+  .input-section {
+    margin-bottom: 15px;
+  }
+  
+  .input-section label {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  
+
+  
+  .submit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .loader-spinner {
+    text-align: center;
+  }
+  
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
   
