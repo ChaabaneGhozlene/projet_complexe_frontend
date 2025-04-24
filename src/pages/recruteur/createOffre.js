@@ -59,9 +59,14 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
   
     try {
       const url = isEditing
-        ? `http://localhost:8000/offres/${offreToEdit.id}`
+        ? `http://localhost:8000/offres/${offreToEdit.id_offre}`
         : 'http://localhost:8000/offres/';
       
+        if (!offreToEdit.titre || !offreToEdit.description || !offreToEdit.typeContrat || !offreToEdit.salaire || !offreToEdit.localisation) {
+          alert("Erreur : Veuillez remplir tous les champs obligatoires.");
+          return;
+        }
+        
       const method = isEditing ? 'put' : 'post';
   
       const response = await axios({

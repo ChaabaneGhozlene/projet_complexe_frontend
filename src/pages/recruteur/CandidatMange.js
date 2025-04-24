@@ -1,17 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import './CandidateManagement.css';
+import {
+  getCandidatById
+ 
+} from './api';
 
-const OffreDetail = ({ offre, onBack, onAccept, onReject, onViewCV }) => {
-  const [filter, setFilter] = useState('TOUS'); // 'TOUS', 'ACCEPTE', 'REJETE', 'EN_ATTENTE'
-
-  const formatStatut = (statut) => {
-    switch(statut) {
-      case 'EN_ATTENTE': return 'ENLATITRITE';
-      case 'ACCEPTE': return 'ACCEPTE';
-      case 'REJETE': return 'REJETE';
-      default: return statut;
+const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
+  const [filter, setFilter] = useState('TOUS'); 
+     // ✅ Empêche les erreurs si l'offre ou les candidats sont manquants
+     console.log("Offre reçue :", offre);
+     
+  
+     if (!offre || !offre.candidats) {
+      return <p className="no-candidates">Chargement de l'offre ou pas de candidats disponibles...</p>;
     }
-  };
+    const formatStatut = (statut) => {
+      switch (statut) {
+        case 'EN_ATTENTE':
+        case 'En_cours':
+        case 'En cours':
+          return 'En cours';
+        case 'REJETE':
+        case 'Refuse':
+        case 'Refusé':
+          return 'Refusé';
+        case 'ACCEPTE':
+        case 'Accepte':
+          return 'Accepté';
+        default:
+          return statut;
+      }
+    };
+    
 
   // Filtrer les candidats selon le filtre sélectionné
   const filteredCandidats = offre.candidats.filter(candidat => {
@@ -27,8 +47,7 @@ const OffreDetail = ({ offre, onBack, onAccept, onReject, onViewCV }) => {
       
       <div className="offre-detail">
         <h2>{offre.titre}</h2>
-        <p className="company">{offre.entreprise}</p>
-        <p className="location">{offre.localisation}</p>
+       
         <p className="date">Publié le: {offre.datePublication}</p>
         
         <div className="description">
@@ -40,16 +59,17 @@ const OffreDetail = ({ offre, onBack, onAccept, onReject, onViewCV }) => {
           <div className="filter-controls">
             <h3>Candidats ({filteredCandidats.length}/{offre.candidats.length})</h3>
             <div className="filter-select">
-              <select 
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="status-filter"
-              >
-                <option value="TOUS">Tous les candidats</option>
-                <option value="ACCEPTE">Acceptés</option>
-                <option value="REJETE">Rejetés</option>
-                <option value="EN_ATTENTE">En attente</option>
-              </select>
+            <select 
+  value={filter}
+  onChange={(e) => setFilter(e.target.value)}
+  className="status-filter"
+>
+  <option value="TOUS">Tous les candidats</option>
+  <option value="Accepté">Acceptés</option>
+  <option value="Refusé">Rejetés</option>
+  <option value="En cours">En attente</option>
+</select>
+
             </div>
           </div>
           
@@ -65,26 +85,26 @@ const OffreDetail = ({ offre, onBack, onAccept, onReject, onViewCV }) => {
               </thead>
               <tbody>
                 {filteredCandidats.map((candidat) => (
-                  <tr key={candidat.id}>
-                    <td>{candidat.nom}</td>
+                  <tr key={candidat.id_candidat}>
+                    <td>{candidat.nom}   {candidat.prenom}</td>
                     <td>{candidat.email}</td>
                     <td>
-                      <span className={`status ${candidat.statut.toLowerCase()}`}>
+                      <span className={`statut ${candidat.statut.toLowerCase()}`}>
                         {formatStatut(candidat.statut)}
                       </span>
                     </td>
                     <td className="actions">
-                      {candidat.statut === 'EN_ATTENTE' && (
+                      {candidat.statut === 'En cours'&&(
                         <>
                           <button 
                             className="accept-button" 
-                            onClick={() => onAccept(candidat.id)}
+                            onClick={() => onAccept(candidat.id_candidature)}
                           >
                             Accepter
                           </button>
                           <button 
                             className="reject-button" 
-                            onClick={() => onReject(candidat.id)}
+                            onClick={() => onReject(candidat.id_candidature)}
                           >
                             Rejeter
                           </button>
@@ -140,11 +160,28 @@ const CandidateManagement = ({
   showCV, 
   onCloseCV 
 }) => {
+  const [offreEnrichie, setOffreEnrichie] = useState(null);
+
+  useEffect(() => {
+    const enrichirCandidats = async () => {
+      if (!selectedOffre || !selectedOffre.candidats) return;
+      const enriched = await Promise.all(
+        selectedOffre.candidats.map(async (c) => {
+          const details = await getCandidatById(c.id_candidat);
+          return { ...c, ...details }; // fusionne les données de base avec les infos nom/prenom
+        })
+      );
+      setOffreEnrichie({ ...selectedOffre, candidats: enriched }); // ✅
+    };
+
+    enrichirCandidats();
+  }, [selectedOffre]);
+
   return (
     <>
       {selectedOffre && (
         <OffreDetail 
-          offre={selectedOffre}
+        offre={offreEnrichie || selectedOffre}
           onBack={onBack}
           onAccept={onAccept}
           onReject={onReject}
