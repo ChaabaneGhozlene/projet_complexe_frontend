@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import OfferManagement from './OffreManagement';
 import CandidateManagement from './CandidatMange';
 import './CandidateManagement.css';
+import Header from '../header/Header';
 
 const App = () => {
-  const [view, setView] = useState('list'); // 'list', 'detail', 'create'
+  const [view, setView] = useState('list');
   const [selectedOffre, setSelectedOffre] = useState(null);
   const [showCV, setShowCV] = useState(null);
   const [offreToEdit, setOffreToEdit] = useState(null);
@@ -64,25 +65,17 @@ const App = () => {
 
   const handleSaveOffre = (offre) => {
     if (offreToEdit) {
-      // Mise à jour d'une offre existante
       setOffres(offres.map(o => o.id === offre.id ? offre : o));
     } else {
-      // Création d'une nouvelle offre
       setOffres([...offres, offre]);
     }
     setView('list');
     setOffreToEdit(null);
   };
-  
 
   const handleBackToList = () => {
     setView('list');
   };
-
-  
-
-  
-
 
   const handleAccept = (candidatId) => {
     const updatedOffres = offres.map(offre => {
@@ -130,6 +123,8 @@ const App = () => {
 
   return (
     <div className="App">
+            <Header />
+
       {view === 'detail' ? (
         <CandidateManagement
           selectedOffre={selectedOffre}
@@ -158,7 +153,6 @@ const App = () => {
       )}
     </div>
   );
-  
 };
 
-export default App
+export default App;

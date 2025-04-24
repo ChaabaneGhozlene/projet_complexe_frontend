@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CandidateManagement.css';
 
 const OffreDetail = ({ offre, onBack, onAccept, onReject, onViewCV }) => {
+  const [filter, setFilter] = useState('TOUS'); // 'TOUS', 'ACCEPTE', 'REJETE', 'EN_ATTENTE'
+
+  const formatStatut = (statut) => {
+    switch(statut) {
+      case 'EN_ATTENTE': return 'ENLATITRITE';
+      case 'ACCEPTE': return 'ACCEPTE';
+      case 'REJETE': return 'REJETE';
+      default: return statut;
+    }
+  };
+
+  // Filtrer les candidats selon le filtre sélectionné
+  const filteredCandidats = offre.candidats.filter(candidat => {
+    if (filter === 'TOUS') return true;
+    return candidat.statut === filter;
+  });
+
   return (
     <div className="container">
       <button className="back-button" onClick={onBack}>
@@ -20,9 +37,23 @@ const OffreDetail = ({ offre, onBack, onAccept, onReject, onViewCV }) => {
         </div>
         
         <div className="candidats-section">
-          <h3>Candidats ({offre.candidats.length})</h3>
+          <div className="filter-controls">
+            <h3>Candidats ({filteredCandidats.length}/{offre.candidats.length})</h3>
+            <div className="filter-select">
+              <select 
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="status-filter"
+              >
+                <option value="TOUS">Tous les candidats</option>
+                <option value="ACCEPTE">Acceptés</option>
+                <option value="REJETE">Rejetés</option>
+                <option value="EN_ATTENTE">En attente</option>
+              </select>
+            </div>
+          </div>
           
-          {offre.candidats.length > 0 ? (
+          {filteredCandidats.length > 0 ? (
             <table className="candidats-table">
               <thead>
                 <tr>
@@ -33,13 +64,13 @@ const OffreDetail = ({ offre, onBack, onAccept, onReject, onViewCV }) => {
                 </tr>
               </thead>
               <tbody>
-                {offre.candidats.map((candidat) => (
+                {filteredCandidats.map((candidat) => (
                   <tr key={candidat.id}>
                     <td>{candidat.nom}</td>
                     <td>{candidat.email}</td>
                     <td>
                       <span className={`status ${candidat.statut.toLowerCase()}`}>
-                        {candidat.statut}
+                        {formatStatut(candidat.statut)}
                       </span>
                     </td>
                     <td className="actions">
@@ -71,13 +102,19 @@ const OffreDetail = ({ offre, onBack, onAccept, onReject, onViewCV }) => {
               </tbody>
             </table>
           ) : (
-            <p className="no-candidates">Aucun candidat pour cette offre pour le moment.</p>
+            <p className="no-candidates">
+              Aucun candidat {filter !== 'TOUS' ? `avec le statut "${formatStatut(filter)}"` : ''} pour cette offre.
+            </p>
           )}
         </div>
       </div>
     </div>
   );
 };
+
+// ... (CVModal et CandidateManagement restent inchangés)
+
+// ... (le reste du code reste inchangé, CVModal et CandidateManagement)
 
 const CVModal = ({ cvUrl, onClose }) => {
   return (

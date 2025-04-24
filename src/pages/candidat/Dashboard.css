@@ -1,0 +1,73 @@
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f0f4f8;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex-grow: 1;
+    padding: 30px;
+  }
+  
+  /* Offers Section */
+  .offers {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .offer-card {
+    background-color: #FFFFFF;
+    border: 1px solid #F1895C;
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;  
+    margin-top: 50px;
+}
+  
+  .offer-card h3 {
+    color: #2E3244;
+    margin-bottom: 10px;
+  }
+  
+  .offer-card p {
+    color: #516079;
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+  
+  .offer-card:hover {
+    transform: translateY(-10px);  /* Élévation de la box */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: #F1895C;
+    
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Appliquer l'animation sur chaque box d'offre */
+ .offer-card {
+    animation: fadeIn 1s ease-out;
+  }
+  
+  .offer-card:hover p{
+    color:white
+  }
+  .offer-card:hover h3{
+    color:white
+  }
