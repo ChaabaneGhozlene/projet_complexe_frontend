@@ -1,0 +1,38 @@
+.profile-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .edit-icon {
+    color: #007bff;
+    transition: 0.3s;
+  }
+  
+  .edit-icon:hover {
+    color: #0056b3;
+  }
+  
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Assure que l'espace est utilisé correctement */
+}
+
+.edit-icon {
+    cursor: pointer;
+    margin-left: 10px; /* Espacement entre le texte et l'icône */
+    margin-top: -20px;
+}
+
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: transparent;
+  }
