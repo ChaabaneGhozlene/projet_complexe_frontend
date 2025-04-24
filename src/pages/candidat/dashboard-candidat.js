@@ -1,13 +1,12 @@
 import React from 'react';
-import Navbar from '../navbar/Navbar'; // Import Navbar
 import Header from '../header/Header'; // Import Header
 import './Dashboard.css';
 
 const DashboardCandidat = () => {
   return (
     <div className="dashboard-container">
-      {/* Navbar */}
-      <Navbar />
+    
+     
 
       {/* Main Content */}
       <div className="main-content">

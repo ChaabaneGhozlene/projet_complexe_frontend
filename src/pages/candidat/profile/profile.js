@@ -1,13 +1,12 @@
 // src/pages/candidat/profile/profile.js
 
 import React from 'react';
-import Navbar from '../../navbar/Navbar';  // Import du Navbar
 import Header from '../../header/Header';  // Import du Header
 
 const Profile = () => {
     return (
         <div className="dashboard-container">
-            <Navbar />  {/* Afficher le Navbar */}
+            
             <div className="main-content">
                 <Header />  {/* Afficher le Header */}
                 <div className="profile-content">
