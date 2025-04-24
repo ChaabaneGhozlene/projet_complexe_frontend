@@ -3,12 +3,17 @@ import React, { useState, useEffect } from 'react';
 import OfferManagement from './OffreManagement';
 import CandidateManagement from './CandidatMange';
 import './CandidateManagement.css';
+
 import Header from '../header/Header';
 import {
   fetchOffres,
   createOffre,
   updateOffre,
-  deleteOffre
+  deleteOffre,
+  updateCandidatureStatus, 
+  getCandidaturesByOffre, 
+  //fetchOffreDetail,
+ 
 } from './api'; // adapte le chemin selon l'arborescence
 
 const App = () => {
@@ -28,8 +33,8 @@ const App = () => {
   }, []);
   
 
-  const handleDeleteOffre = async (offreId) => {
-    await deleteOffre(offreId);
+  const handleDeleteOffre = async (offre_id) => {
+    await deleteOffre(offre_id);
     const updated = await fetchOffres();
     setOffres(updated);
   };
@@ -42,8 +47,8 @@ const App = () => {
   const handleSaveOffre = async (offre) => {
     if (offreToEdit) {
       // Mise à jour de l'offre
-      await updateOffre(offre.id, offre);
-      const updatedOffres = offres.map(o => o.id === offre.id ? offre : o);
+      await updateOffre(offre.id_offre, offre);
+      const updatedOffres = offres.map(o => o.id_offre === offre.id_offre ? offre : o);
       setOffres(updatedOffres);  // Mise à jour de l'état local
     } else {
       // Création d'une nouvelle offre
@@ -57,40 +62,35 @@ const App = () => {
   const handleBackToList = () => {
     setView('list');
   };
-
-  const handleAccept = (candidatId) => {
-    const updatedOffres = offres.map(offre => {
-      if (offre.id === selectedOffre.id) {
-        const updatedCandidats = offre.candidats.map(candidat => {
-          if (candidat.id === candidatId) {
-            return { ...candidat, statut: 'ACCEPTE' };
-          }
-          return candidat;
-        });
-        return { ...offre, candidats: updatedCandidats };
-      }
-      return offre;
-    });
-    setOffres(updatedOffres);
-    setSelectedOffre(updatedOffres.find(o => o.id === selectedOffre.id));
+/*
+  const updateStatutCandidat = async (id_candidature, statut)=>{
+    try {
+      await updateCandidatureStatus(id_candidature, statut);
+      const updatedCandidats = await getCandidaturesByOffre(selectedOffre.id_offre);
+  
+      const updatedOffres = offres.map(offre => {
+        if (offre.id_offre === selectedOffre.id_offre) {
+          return { ...offre, candidats: updatedCandidats };
+        }
+        return offre;
+      });
+  
+      setOffres(updatedOffres);
+      // Ajoute un identifiant temporaire pour forcer le refresh
+      setSelectedOffre({ ...selectedOffre, candidats: updatedCandidats, updatedAt: new Date().getTime() });
+  
+    } catch (error) {
+      console.error(`Erreur lors de la mise à jour du statut (${statut}) :`, error);
+    }
   };
-
-  const handleReject = (candidatId) => {
-    const updatedOffres = offres.map(offre => {
-      if (offre.id === selectedOffre.id) {
-        const updatedCandidats = offre.candidats.map(candidat => {
-          if (candidat.id === candidatId) {
-            return { ...candidat, statut: 'REJETE' };
-          }
-          return candidat;
-        });
-        return { ...offre, candidats: updatedCandidats };
-      }
-      return offre;
-    });
-    setOffres(updatedOffres);
-    setSelectedOffre(updatedOffres.find(o => o.id === selectedOffre.id));
-  };
+  */
+  
+ 
+  
+  // Et tu l’utilises comme ça :
+  const handleAccept = (id_candidature) => updateCandidatureStatus(id_candidature, "Accepte");
+  const handleReject = (id_candidature) => updateCandidatureStatus(id_candidature, "Refuse");
+  
 
   const handleViewCV = (cvUrl) => {
     setShowCV(cvUrl);
@@ -118,10 +118,16 @@ const App = () => {
           offres={offres}
           view={view}
           onCreateOffre={() => setView('create')}
-          onViewOffre={(offre) => {
-            setSelectedOffre(offre);
-            setView('detail');
-          }}
+          onViewOffre={async (offre) => {
+            try {
+              const candidats = await getCandidaturesByOffre(offre.id_offre); // Appel backend
+              const offreAvecCandidats = { ...offre, candidats }; // Combine offre + candidats
+              setSelectedOffre(offreAvecCandidats); // Stocke tout dans l'état
+              setView('detail'); // Affiche les détails de l'offre
+            } catch (error) {
+              console.error("Erreur lors de la récupération des candidatures :", error);
+            }
+          }}// ✅ ici
           onSaveOffre={handleSaveOffre}
           onCancelCreate={() => setView('list')}
           onDeleteOffre={handleDeleteOffre}

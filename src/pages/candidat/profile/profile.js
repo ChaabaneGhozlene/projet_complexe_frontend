@@ -92,6 +92,7 @@ const Profile = () => {
                         <div className="profile-box">
                             {isEditing ? (
                                 <form onSubmit={handleSubmit}>
+                                <div className="input-section">
                                     <label>
                                         Nom:
                                         <input
@@ -102,6 +103,8 @@ const Profile = () => {
                                             onChange={handleChange}
                                         />
                                     </label>
+                                    </div>
+                                    <div className="input-section">
                                     <label>
                                         Prénom:
                                         <input
@@ -112,6 +115,8 @@ const Profile = () => {
                                             onChange={handleChange}
                                         />
                                     </label>
+                                    </div>
+                                    <div className="input-section">
                                     <label>
                                         Téléphone:
                                         <input
@@ -122,6 +127,8 @@ const Profile = () => {
                                             onChange={handleChange}
                                         />
                                     </label>
+                                    </div>
+                                    <div className="input-section">
                                     <label>
                                         CV:
                                         <input
@@ -132,7 +139,8 @@ const Profile = () => {
                                             onChange={handleChange}
                                         />
                                     </label>
-                                    <button type="submit">Enregistrer</button>
+                                    </div>
+                                    <button type="submit" className="submit-btn">Enregistrer</button>
                                 </form>
                             ) : (
                                 <div>

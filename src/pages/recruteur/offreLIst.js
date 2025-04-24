@@ -87,7 +87,7 @@ const OffresList = ({
               <button
                 className="confirm-delete-button"
                 onClick={() => {
-                  onDeleteOffre(offreASupprimer.id);  // On delete the offer
+                  onDeleteOffre(offreASupprimer.id_offre);  // On delete the offer
                   setOffreASupprimer(null);  // Reset the delete confirmation state
                 }}
               >
