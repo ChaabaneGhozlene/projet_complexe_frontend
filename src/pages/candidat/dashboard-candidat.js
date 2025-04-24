@@ -10,6 +10,7 @@ const DashboardCandidat = () => {
 
       {/* Main Content */}
       <div className="main-content">
+      <h2>Les offres recommandés d'près votre CV </h2>
         {/* Header */}
         <Header />
 
