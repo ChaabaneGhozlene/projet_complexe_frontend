@@ -16,15 +16,10 @@ const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
     }
     const formatStatut = (statut) => {
       switch (statut) {
-        case 'EN_ATTENTE':
-        case 'En_cours':
         case 'En cours':
           return 'En cours';
-        case 'REJETE':
         case 'Refuse':
-        case 'Refusé':
           return 'Refusé';
-        case 'ACCEPTE':
         case 'Accepte':
           return 'Accepté';
         default:
@@ -32,46 +27,46 @@ const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
       }
     };
     
-
-  // Filtrer les candidats selon le filtre sélectionné
-  const filteredCandidats = offre.candidats.filter(candidat => {
-    if (filter === 'TOUS') return true;
-    return candidat.statut === filter;
-  });
-
-  return (
-    <div className="container">
-      <button className="back-button" onClick={onBack}>
-        ← Retour à la liste
-      </button>
-      
-      <div className="offre-detail">
-        <h2>{offre.titre}</h2>
-       
-        <p className="date">Publié le: {offre.datePublication}</p>
-        
-        <div className="description">
-          <h3>Description de l'offre</h3>
-          <p>{offre.description}</p>
-        </div>
-        
-        <div className="candidats-section">
-          <div className="filter-controls">
-            <h3>Candidats ({filteredCandidats.length}/{offre.candidats.length})</h3>
-            <div className="filter-select">
-            <select 
+  
+    const filteredCandidats = offre.candidats.filter(candidat => {
+      if (filter === 'TOUS') return true;
+      return candidat.statut === filter;
+    });
+    
+  
+    return (
+      <div className="container">
+        <button className="back-button" onClick={onBack}>
+          ← Retour à la liste
+        </button>
+  
+        <div className="offre-detail">
+          <h2>{offre.titre}</h2>
+          <p className="date">Publié le: {offre.datePublication}</p>
+  
+          <div className="description">
+            <h3>Description de l'offre</h3>
+            <p>{offre.description}</p>
+          </div>
+  
+          <div className="candidats-section">
+            <div className="filter-controls">
+              <h3>Candidats ({filteredCandidats.length}/{offre.candidats.length})</h3>
+              <div className="filter-select">
+              <select 
   value={filter}
   onChange={(e) => setFilter(e.target.value)}
   className="status-filter"
 >
   <option value="TOUS">Tous les candidats</option>
-  <option value="Accepté">Acceptés</option>
-  <option value="Refusé">Rejetés</option>
+  <option value="Accepte">Acceptés</option>
+  <option value="Refuse">Rejetés</option>
   <option value="En cours">En attente</option>
 </select>
 
+              </div>
             </div>
-          </div>
+  
           
           {filteredCandidats.length > 0 ? (
             <table className="candidats-table">
@@ -110,12 +105,7 @@ const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
                           </button>
                         </>
                       )}
-                      <button 
-                        className="view-cv-button" 
-                        onClick={() => onViewCV(candidat.cv)}
-                      >
-                        Voir CV
-                      </button>
+                     
                     </td>
                   </tr>
                 ))}
@@ -132,33 +122,14 @@ const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
   );
 };
 
-// ... (CVModal et CandidateManagement restent inchangés)
 
-// ... (le reste du code reste inchangé, CVModal et CandidateManagement)
-
-const CVModal = ({ cvUrl, onClose }) => {
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="close-modal" onClick={onClose}>×</button>
-        <iframe 
-          src={cvUrl} 
-          title="CV du candidat" 
-          className="cv-iframe"
-        ></iframe>
-      </div>
-    </div>
-  );
-};
 
 const CandidateManagement = ({ 
   selectedOffre, 
   onBack, 
   onAccept, 
   onReject, 
-  onViewCV, 
-  showCV, 
-  onCloseCV 
+  
 }) => {
   const [offreEnrichie, setOffreEnrichie] = useState(null);
 
@@ -185,16 +156,11 @@ const CandidateManagement = ({
           onBack={onBack}
           onAccept={onAccept}
           onReject={onReject}
-          onViewCV={onViewCV}
+          
         />
       )}
       
-      {showCV && (
-        <CVModal 
-          cvUrl={showCV} 
-          onClose={onCloseCV}
-        />
-      )}
+      
     </>
   );
 };

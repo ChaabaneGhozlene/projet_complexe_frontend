@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Pencil, Trash2, Search, Plus } from 'lucide-react';
+import { Pencil, Trash2, Plus } from 'lucide-react';
+
+
 import './CandidateManagement.css';
 
 const OffresList = ({ 
@@ -17,17 +19,19 @@ const OffresList = ({
     offre.titre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+
   return (
     <div className="container">
       <h1>Gestion des Offres d'Emploi</h1>
       
       <div className="search-and-create">
-        {/* Barre de recherche */}
+        
         <div className="search-bar-container">
-          <Search size={18} className="search-icon" />
-          <input
+        
+
+          <input 
             type="text"
-            placeholder="     Rechercher par titre d'offre..."
+            placeholder=" Rechercher par titre d'offre..."
             className="search-bar"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -52,7 +56,7 @@ const OffresList = ({
                 <h3>{offre.titre}</h3>
                 <p className="company">{offre.entreprise}</p>
                 <p className="location">{offre.localisation}</p>
-                <p className="date">Publié le: {offre.datePublication}</p>
+                <p className="date">Publié le: {offre.date_publication}</p>
               </div>
               <div className="offre-actions">
                 <button className="edit-button" onClick={(e) => {

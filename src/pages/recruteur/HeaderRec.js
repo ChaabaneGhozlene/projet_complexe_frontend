@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Header.css';
+import './HeaderRec.css';
 import logoImg from '../../assets/khadamni.png';
 import { FaUser, FaBell } from 'react-icons/fa';
 
-const Header = () => {
+const HeaderRec = () => {
 
    const [candidat, setCandidat] = useState(null);
  const [formData, setFormData] = useState({});
@@ -58,10 +58,10 @@ const Header = () => {
     <header className="header-container">
       <div className="header-content">
         <div className="header-left">
-          <img src={logoImg} className="logo" />
+         
           <nav className="nav-links">
-            <a href="/candidat/dashboard-candidat" className="nav-link">Offres</a>
-            <a href="/profile" className="nav-link">Profile</a>
+          <img src={logoImg} className="logo" />
+           
           </nav>
         </div>
 
@@ -89,4 +89,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderRec;

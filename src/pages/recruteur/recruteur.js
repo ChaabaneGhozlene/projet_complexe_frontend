@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import OfferManagement from './OffreManagement';
 import CandidateManagement from './CandidatMange';
 import './CandidateManagement.css';
+import HeaderRec from './HeaderRec';
 
-import Header from '../header/Header';
 import {
   fetchOffres,
   createOffre,
@@ -84,7 +84,7 @@ const App = () => {
     }
   };
   */
-  
+
  
   
   // Et tu l’utilises comme ça :
@@ -102,7 +102,8 @@ const App = () => {
 
   return (
     <div className="App">
-      <Header />
+    <HeaderRec/>
+      
       {view === 'detail' ? (
         <CandidateManagement
           selectedOffre={selectedOffre}
@@ -117,7 +118,10 @@ const App = () => {
         <OfferManagement
           offres={offres}
           view={view}
-          onCreateOffre={() => setView('create')}
+          onCreateOffre={() =>{
+            setOffreToEdit(null);  // Réinitialise l'état de l'offre à éditer
+            setView('edit');  // Affiche le formulaire pour créer une nouvelle offre
+          }}
           onViewOffre={async (offre) => {
             try {
               const candidats = await getCandidaturesByOffre(offre.id_offre); // Appel backend

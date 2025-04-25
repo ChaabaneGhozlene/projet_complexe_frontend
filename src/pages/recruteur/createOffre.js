@@ -3,11 +3,12 @@ import { FiX } from 'react-icons/fi';
 import axios from 'axios';
 import './createOffre.css';
 
-const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
+const CreateOffreForm = ({ onSave, onCancel, offreToEdit, resetForm }) => {
   const isEditing = !!offreToEdit;
-  const [isSubmitting, setIsSubmitting] = useState(false);  // Nouveau state pour gérer l'état de la soumission
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState({
+  // État initial du formulaire
+  const initialState = {
     titre: '',
     description: '',
     typeContrat: '',
@@ -15,18 +16,35 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
     localisation: '',
     dateExpiration: '',
     dureeContrat: '',
-    profilRecherche: '',
     niveauExperience: '',
     motsCles: '',
-    typeLieu: '',
-    ...offreToEdit
-  });
+    typeLieu: ''
+  };
 
+  const [formData, setFormData] = useState(initialState);
+
+  // Effet pour gérer les changements d'offreToEdit ET resetForm
   useEffect(() => {
     if (offreToEdit) {
-      setFormData(prev => ({ ...prev, ...offreToEdit }));
+      setFormData({
+        titre: offreToEdit.titre || '',
+        description: offreToEdit.description || '',
+        typeContrat: offreToEdit.typeContrat || '',
+        salaire: offreToEdit.salaire || '',
+        localisation: offreToEdit.localisation || '',
+        dateExpiration: offreToEdit.dateExpiration?.split('T')[0] || '',
+        dureeContrat: offreToEdit.duree_contrat || '',
+        niveauExperience: offreToEdit.niveau_experience || '',
+        motsCles: offreToEdit.mots_cles || '',
+        typeLieu: offreToEdit.type_lieu || ''
+      });
+    } else if (resetForm) {
+      // Réinitialisation explicite du formulaire
+      setFormData(initialState);
     }
-  }, [offreToEdit]);
+  }, [offreToEdit, resetForm]);
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,12 +53,10 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (isSubmitting) return; // Si une soumission est déjà en cours, on arrête ici
-  
-    setIsSubmitting(true);  // Activer l'état de soumission
-  
-    // Adapter les noms pour qu'ils correspondent à ceux attendus par l'API
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     const formDataWithRecruteur = {
       titre: formData.titre,
       description: formData.description,
@@ -52,74 +68,52 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
       mots_cles: formData.motsCles,
       type_lieu: formData.typeLieu,
       id_recruteur: 1,
-      profilRecherche: formData.profilRecherche,
-      dateExpiration: formData.dateExpiration,
       datePublication: new Date().toISOString()
     };
-  
+
     try {
       const url = isEditing
         ? `http://localhost:8000/offres/${offreToEdit.id_offre}`
         : 'http://localhost:8000/offres/';
-      
-        if (!offreToEdit.titre || !offreToEdit.description || !offreToEdit.typeContrat || !offreToEdit.salaire || !offreToEdit.localisation) {
-          alert("Erreur : Veuillez remplir tous les champs obligatoires.");
-          return;
-        }
-        
       const method = isEditing ? 'put' : 'post';
-  
+
+      if (!formData.titre || !formData.description || !formData.typeContrat || !formData.salaire || !formData.localisation) {
+        alert("Veuillez remplir tous les champs obligatoires.");
+        return;
+      }
+
       const response = await axios({
         method,
         url,
         data: formDataWithRecruteur,
       });
-  
-      console.log('Réponse API:', response.data);
-  
-      // Mise à jour locale sans refaire un fetch
-      if (isEditing) {
-        // Si c'est une modification, on met à jour localement
-        onSave(response.data);
-      } else {
-        // Si c'est une nouvelle offre, on ajoute à la liste existante
-        onSave(response.data);  // Ajouter la nouvelle offre dans l'état parent
-      }
-      
-      // Pas besoin de refaire un fetch si l'état local a été mis à jour
-      // onUpdateOffres(response.data); // Cette ligne est supprimée pour éviter le doublon
-  
+
+      onSave(response.data);
     } catch (error) {
-      // Meilleure gestion des erreurs avec messages plus clairs
       if (error.response) {
-        console.error('Réponse du serveur:', error.response.data);
-        console.error('Status de l\'erreur:', error.response.status);
-        alert('Erreur serveur: ' + error.response.data.message); // Exemple de message utilisateur
+        alert('Erreur serveur: ' + error.response.data.message);
       } else if (error.request) {
-        console.error('Aucune réponse du serveur:', error.request);
         alert('Problème de connexion. Essayez plus tard.');
       } else {
-        console.error('Erreur de configuration de la requête:', error.message);
         alert('Erreur: ' + error.message);
       }
     } finally {
-      setIsSubmitting(false); 
-       // Réactiver l'état de soumission après l'achèvement de la requête
+      setIsSubmitting(false);
     }
   };
-  
 
   return (
     <div className="form-wrapper">
       <div className="form-container">
         <div className="form-header">
           <h1 className="form-title">{isEditing ? 'Modifier une Offre' : 'Créer une Nouvelle Offre'}</h1>
-          <button className="close-button" onClick={onCancel} aria-label="Fermer le formulaire">
+          <button className="close-button" onClick={onCancel}>
             <FiX size={20} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
+          {/* Titre */}
           <div className="form-section">
             <h2 className="section-title">Titre de l'offre</h2>
             <input
@@ -132,6 +126,7 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
             />
           </div>
 
+          {/* Type de Contrat */}
           <div className="form-section">
             <h2 className="section-title">Type de Contrat</h2>
             <select
@@ -180,6 +175,7 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
             </div>
           </div>
 
+          {/* Durée & Expiration */}
           <div className="form-section">
             <div className="form-row">
               <div className="form-group">
@@ -189,23 +185,13 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
                   name="dureeContrat"
                   value={formData.dureeContrat}
                   onChange={handleChange}
-                  required
-                  className="uniform-input"
-                />
-              </div>
-              <div className="form-group">
-                <h3 className="sub-section-title">Date d'expiration</h3>
-                <input
-                  type="date"
-                  name="dateExpiration"
-                  value={formData.dateExpiration}
-                  onChange={handleChange}
                   className="uniform-input"
                 />
               </div>
             </div>
           </div>
 
+          {/* Niveau & Type Lieu */}
           <div className="form-row">
             <div className="form-group">
               <h3 className="sub-section-title">Niveau d'expérience</h3>
@@ -240,6 +226,7 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
             </div>
           </div>
 
+          {/* Mots Clés */}
           <div className="form-section">
             <h3 className="sub-section-title">Mots-Clés</h3>
             <input
@@ -247,20 +234,12 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
               name="motsCles"
               value={formData.motsCles}
               onChange={handleChange}
-              placeholder="React, Node.js..."
-              required
               className="uniform-input"
-            />
-
-            <h3 className="sub-section-title">Profil Recherché</h3>
-            <textarea
-              name="profilRecherche"
-              value={formData.profilRecherche}
-              onChange={handleChange}
-              className="uniform-input uniform-textarea"
+              required
             />
           </div>
 
+          {/* Description */}
           <div className="form-section">
             <h2 className="section-title">Description</h2>
             <textarea
@@ -272,19 +251,12 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
             />
           </div>
 
+          {/* Boutons */}
           <div className="form-actions">
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={isSubmitting} // Désactive le bouton pendant la soumission
-            >
+            <button type="submit" className="submit-button" disabled={isSubmitting}>
               {isEditing ? 'Modifier l\'Offre' : 'Créer l\'Offre'}
             </button>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="cancel-button"
-            >
+            <button type="button" onClick={onCancel} className="cancel-button">
               Annuler
             </button>
           </div>
@@ -293,6 +265,5 @@ const CreateOffreForm = ({ onSave, onCancel, offreToEdit }) => {
     </div>
   );
 };
-
 
 export default CreateOffreForm;
