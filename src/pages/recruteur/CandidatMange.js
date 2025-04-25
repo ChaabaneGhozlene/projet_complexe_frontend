@@ -5,11 +5,12 @@ import {
  
 } from './api';
 
-const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
+const OffreDetail = ({ offre, onBack,  onAccept, onReject }) => {
   const [filter, setFilter] = useState('TOUS'); 
      // ✅ Empêche les erreurs si l'offre ou les candidats sont manquants
      console.log("Offre reçue :", offre);
      
+      
   
      if (!offre || !offre.candidats) {
       return <p className="no-candidates">Chargement de l'offre ou pas de candidats disponibles...</p>;
@@ -48,7 +49,7 @@ const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
       <div className="offre-detail">
         <h2>{offre.titre}</h2>
        
-        <p className="date">Publié le: {offre.datePublication}</p>
+        <p className="date">Publié le: {offre.date_publication}</p>
         
         <div className="description">
           <h3>Description de l'offre</h3>
@@ -110,12 +111,10 @@ const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
                           </button>
                         </>
                       )}
-                      <button 
-                        className="view-cv-button" 
-                        onClick={() => onViewCV(candidat.cv)}
-                      >
-                        Voir CV
-                      </button>
+
+
+
+
                     </td>
                   </tr>
                 ))}
@@ -132,24 +131,9 @@ const OffreDetail = ({ offre, onBack, onViewCV, onAccept, onReject }) => {
   );
 };
 
-// ... (CVModal et CandidateManagement restent inchangés)
 
-// ... (le reste du code reste inchangé, CVModal et CandidateManagement)
 
-const CVModal = ({ cvUrl, onClose }) => {
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="close-modal" onClick={onClose}>×</button>
-        <iframe 
-          src={cvUrl} 
-          title="CV du candidat" 
-          className="cv-iframe"
-        ></iframe>
-      </div>
-    </div>
-  );
-};
+
 
 const CandidateManagement = ({ 
   selectedOffre, 
@@ -189,12 +173,7 @@ const CandidateManagement = ({
         />
       )}
       
-      {showCV && (
-        <CVModal 
-          cvUrl={showCV} 
-          onClose={onCloseCV}
-        />
-      )}
+      
     </>
   );
 };

@@ -62,8 +62,8 @@ const App = () => {
   const handleBackToList = () => {
     setView('list');
   };
-/*
-  const updateStatutCandidat = async (id_candidature, statut)=>{
+
+ /*onst updateStatutCandidat = async (id_candidature, statut)=>{
     try {
       await updateCandidatureStatus(id_candidature, statut);
       const updatedCandidats = await getCandidaturesByOffre(selectedOffre.id_offre);
@@ -83,13 +83,36 @@ const App = () => {
       console.error(`Erreur lors de la mise à jour du statut (${statut}) :`, error);
     }
   };
-  */
   
+  */
  
   
-  // Et tu l’utilises comme ça :
-  const handleAccept = (id_candidature) => updateCandidatureStatus(id_candidature, "Accepte");
-  const handleReject = (id_candidature) => updateCandidatureStatus(id_candidature, "Refuse");
+  const refreshCandidatures = async () => {
+    const updatedCandidats = await getCandidaturesByOffre(selectedOffre.id_offre);
+    setSelectedOffre(prev => ({
+      ...prev,
+      candidats: updatedCandidats
+    }));
+  };
+  
+  const handleAccept = async (id_candidature) => {
+    try {
+      await updateCandidatureStatus(id_candidature, "Accepte");
+      await refreshCandidatures();
+    } catch (error) {
+      console.error("Erreur lors de l'acceptation :", error);
+    }
+  };
+  
+  const handleReject = async (id_candidature) => {
+    try {
+      await updateCandidatureStatus(id_candidature, "Refuse");
+      await refreshCandidatures();
+    } catch (error) {
+      console.error("Erreur lors du rejet :", error);
+    }
+  };
+  
   
 
   const handleViewCV = (cvUrl) => {

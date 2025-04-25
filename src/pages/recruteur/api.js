@@ -59,19 +59,32 @@ export const getCandidaturesByOffre = async (id_offre) => {
     return [];
   }
 };
+// api.js
+
 export const updateCandidatureStatus = async (id_candidature, statut) => {
   try {
-    const response = await axios.patch(
-      `${CANDIDATURES_API_URL}/${id_candidature}/statut`,
-      { statut }, // on envoie un objet JSON
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-    return response.data;
+    const response = await fetch(`http://localhost:8000/candidatures/${id_candidature}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        // Ajoute ici un header Authorization si tu utilises un token JWT
+        // 'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ statut }), // le corps doit correspondre au schéma `CandidatureUpdate`
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error(`Erreur lors de la mise à jour du statut pour la candidature ${id_candidature} :`, error);
+    console.error('Erreur lors de la mise à jour du statut de la candidature :', error);
     throw error;
   }
 };
+
 
 export const fetchOffreDetail = async (id_offre) => {
   const response = await fetch(`${API_BASE_URL}/${id_offre}`);
@@ -82,4 +95,28 @@ export const fetchOffreDetail = async (id_offre) => {
 export const getCandidatById = async (id) => {
   const response = await axios.get(`http://localhost:8000/candidats/${id}`);
   return response.data;
+};
+
+// api.js
+
+export const getCV = async () => {
+  try {
+    const response = await fetch("http://localhost:8000/get_cv");
+    
+    if (!response.ok) {
+      throw new Error('Erreur lors du téléchargement du CV');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'CV_NadaMorghom.pdf');
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (error) {
+    console.error('Erreur API : ', error);
+    throw error;
+  }
 };
