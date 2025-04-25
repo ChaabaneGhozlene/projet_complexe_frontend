@@ -27,7 +27,6 @@ const Profile = () => {
                     nom: data.nom,
                     prenom: data.prenom,
                     tel: data.tel || "",
-                    cv: data.cv || ""
                 });
             } catch (error) {
                 console.error("Erreur:", error);
@@ -128,26 +127,15 @@ const Profile = () => {
                                         />
                                     </label>
                                     </div>
-                                    <div className="input-section">
-                                    <label>
-                                        CV:
-                                        <input
-                                            type="text"
-                                            className="input-field"
-                                            name="cv"
-                                            value={formData.cv}
-                                            onChange={handleChange}
-                                        />
-                                    </label>
-                                    </div>
-                                    <button type="submit" className="submit-btn">Enregistrer</button>
+                                    
+                                    <button type="submit">Enregistrer</button>
                                 </form>
                             ) : (
                                 <div>
                                     <p><strong>Nom:</strong> {candidat.nom} {candidat.prenom}</p>
                                     <p><strong>Email:</strong> {candidat.email}</p>
                                     <p><strong>Téléphone:</strong> {candidat.tel || "Non fourni"}</p>
-                                    <p><strong>CV:</strong> {candidat.cv || "Aucun CV enregistré"}</p>
+                                    
                                 
                                 </div>
                             )}

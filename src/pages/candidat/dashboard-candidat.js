@@ -1,23 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Header from '../header/Header'; // Import Header
+import Header from '../header/Header';
 import './Dashboard.css';
 
 const DashboardCandidat = () => {
   const location = useLocation();
   const offres = location.state?.offres || [];
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredOffres = offres.filter((offre) =>
+    offre.titre.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="dashboard-container">
-      {/* Main Content */}
-      <div className="main-content">
-      <h2>Les offres recommandés d'près votre CV </h2>
-        {/* Header */}
-        <Header />
+      {/* Header */}
+      <Header />
 
-        {/* Offers Section */}
+      <div className="main-content">
+        {/* Champ de recherche */}
+        <input
+          type="text"
+          placeholder="Rechercher une offre par titre..."
+          className="search-bar"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
+        <h2>Les offres recommandées d’après votre CV</h2>
+
+        
+        {/* Liste des offres filtrées */}
         <div className="offers">
-        {offres.length > 0 ? (
-            offres.map((offre, index) => (
+          {filteredOffres.length > 0 ? (
+            filteredOffres.map((offre, index) => (
               <div className="offer-card" key={index}>
                 <h3>{offre.titre}</h3>
                 <p><strong>Lieu:</strong> {offre.localisation}</p>

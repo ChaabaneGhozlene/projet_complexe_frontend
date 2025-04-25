@@ -1,121 +1,155 @@
-/* Header Styling */
+/* Général */
 .header-container {
   width: 100%;
-  background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-
 }
 
 .header-content {
-  width: 100%;
-  margin: 0 ;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 30px;
-
+  padding: 15px 40px;
+  max-width: 1500px;
+  margin: auto;
+  margin-left: 9px;
+  margin-right: 0px;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 25px;
 }
 
 .logo {
-  height: 40px;
+  height: 45px;
   width: auto;
 }
 
-.site-title {
-  font-size: 1.8rem;
-  color: #2E3244;
-  margin: 0;
-}
-
+/* Navigation */
 .nav-links {
   display: flex;
-  gap: 20px;
+  gap: 25px;
 }
 
 .nav-link {
+  position: relative;
   text-decoration: none;
   color: #2E3244;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 500;
-  padding: 5px 0;
-  position: relative;
+  transition: color 0.3s ease;
 }
 
 .nav-link:hover {
   color: #F1895C;
 }
 
-.nav-link:hover::after {
+.nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -4px;
   left: 0;
-  width: 100%;
+  width: 0;
   height: 2px;
   background-color: #F1895C;
+  transition: width 0.3s ease;
 }
 
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Header Right */
 .header-right {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.search-bar {
-  padding: 10px 15px;
-  font-size: 1rem;
-  width: 250px;
-  border: 1px solid #C5C6C6;
-  border-radius: 25px;
-  outline: none;
-}
-
-.icons {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.icons .user-icon {
-  position: relative;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.icons .notification-icon {
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.user-info-box {
+.notification-popup {
   position: absolute;
   right: 0;
-  
-  top: 50px;
+  top: 40px;
+  background-color: #ffffff;
+  color: #2E3244;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  width: 270px;
+  font-size: 0.95rem;
+  z-index: 10;
+  margin-right: 10px;
+}
+
+.notification-popup p {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #f1f1f1;
+  padding-bottom: 8px;
+}
+
+.notification-popup p:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+
+.search-bar {
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 1rem;
+  width: 300px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.search-bar:focus {
+  border-color: #F1895C;
+}
+
+/* Icônes */
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.user-icon-container,
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.user-icon-container:hover,
+.notification-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Boîte infos utilisateur */
+.user-info-box {
+  position: absolute;
+  top: 40px;
+  right: 0;
   background-color: #2E3244;
   color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  width: 250px;
- 
-  font-size: 1rem;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  width: 230px;
+  font-size: 0.95rem;
   z-index: 10;
-  margin-right: 70px;}
+}
 
 .user-info-box p {
-  margin: 0 0 15px 0;
-  font-size: 1rem;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
 }
 
 .user-info-box p:last-child {
@@ -123,7 +157,5 @@
 }
 
 .user-info-box strong {
-  color: #C5C6C6;
+  color: #F1895C;
 }
-
-/* Ajoutez cette marge au contenu principal pour éviter qu'il ne soit caché sous le header fixe */
